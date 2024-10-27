@@ -6,15 +6,11 @@ function randomValueFromArray(array){
 }
 
 export default function App() {
-  const [showStory,setShowStory] = useState(false);
   const [xItem,setXItem] = useState("");
   const [yItem,setYItem] = useState("");
   const [zItem,setZItem] = useState("");
   const [customName,setCustomName] = useState("");
-  const [displayName,setDisplayName] = useState("Bob");
   const [ukus,setUkus] = useState("us");
-  const [temperature,setTemperature] = useState("94 fahrenheit");
-  const [weight,setWeight] = useState("300 pounds");
 
   const handleGenarateStory = () => {
     const xItems = ["Willy the Goblin","Big Daddy","Father Christmas"];
@@ -24,25 +20,8 @@ export default function App() {
     setXItem(randomValueFromArray(xItems));
     setYItem(randomValueFromArray(yItems));
     setZItem(randomValueFromArray(zItems));
-
-    if(customName){
-        setDisplayName(customName);
-    }else{
-        setDisplayName("Bob");
-    }
-
-    if(ukus === "uk"){
-        const celsius = Math.round(((94-32)*5)/9);
-        setTemperature(`${celsius} celsius`);
-        const stones = Math.round(300/14);
-        setWeight(`${stones} stones`);
-    }else{
-        setTemperature("94 fahrenheit");
-        setWeight("300 pounds");
-    }
-    setShowStory(true);
   }
-
+  
   const handleNameChange = (event)=>{
     setCustomName(event.target.value);
   }
@@ -50,6 +29,11 @@ export default function App() {
   const handleUkusChange = (event)=>{
     setUkus(event.target.value);
   }
+
+  const temperature = ukus === "uk" ? `${Math.round(((94-32)*5)/9)} celsius`:"94 fahrenheit";
+  const weight = ukus === "uk" ? `${Math.round(300/14)} stones`:"300 pounds";
+  const displayName = customName === "" ? "Bob":customName;
+  const isStoryReady = xItem && yItem && zItem;
 
   return (
     <>
@@ -66,7 +50,7 @@ export default function App() {
       <div>
         <button onClick={handleGenarateStory}>Generate random story</button>
       </div>
-      {showStory && (
+      {isStoryReady && (
         <p>
           It was {temperature} outside, so {xItem} went for a walk. When they
           got to {yItem}, they stared in horror for a few moments, then {zItem}.
